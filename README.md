@@ -40,6 +40,11 @@ library-api/
 ┃ ┣━━ book_routes.py
 ┃ ┣━━ member_routes.py
 ┃ ┗━━ report_routes.py
+┣━━ models/
+┃ ┣━━ book_create.py
+┃ ┣━━ book_view.py
+┃ ┣━━ member_create.py
+┃ ┗━━ member_create.py
 ┣━━ logs/
 ┃ ┗━━ app.log
 ┃
@@ -47,13 +52,16 @@ library-api/
 ┣━━ requirements.txt
 ┗━━ .gitignorelibrary-api/
 ```
-  
+
 # Setup & How to run:
+
 first clone the project and `cd` into it
 open your terminal and run:
+
 ```bash
 git clone "https://github.com/ariWeinberg/library-project-exam-prep.git" ./library-project && cd ./library-project
 ```
+
 Then you can run this project in one of three ways:
 
 1. #### localy with mysql in a container:
@@ -154,9 +162,6 @@ Then you can run this project in one of three ways:
 
 ---
 
-
-
-
 # Endpoints:
 
 | method | endpoint                       | description                                 | path parameters                                                        | query parameters | request body                                                                                                                                                  | response           |
@@ -177,31 +182,37 @@ Then you can run this project in one of three ways:
 | GET    | /reports/books-by-genre        | get how many books are in each genere       | none                                                                   | none             | none                                                                                                                                                          |                    |
 | GET    | /reports/top-member            | get the member who borrowed the most        | none                                                                   | none             | none                                                                                                                                                          |                    |
 
-
-
 ---
-  
 
 # System rules:
+
 1. A book is created with title, author, genere (supplied by user) and `is_available`=True, `borrowed_by`=NULL.
 2. Genere must be one of the folowing values:  `Fiction` / `Non-Fiction` / `Science` / `History` / `Other`.
 3. A member is created with name, email (supplied by user) and `is active`=True, `total_borrows`=0.
 4. `email` must be unique across all records.
-5. A member with`is active`=False cannot borrow any book.
+5. A member with `is active`=False cannot borrow any book.
 6. Nobody can borow a book with `is_available`=False (already borowed).
 7. A user can have a maximum of 3 borrowed books at any given time.
 8. A book can only be returned by the member it is currently borrowed to.
 
-
 # System flow:
-### System setup  
-### ↓  
-### A request comes in  
-### ↓  
-### Request is handled  
-### ↓  
-### DB is updated  
-### ↓  
-### Response sent to user  
+
+### System setup
+
+### ↓
+
+### A request comes in
+
+### ↓
+
+### Request is handled
+
+### ↓
+
+### DB is updated
+
+### ↓
+
+### Response sent to user
 
 ---
