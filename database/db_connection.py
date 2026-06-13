@@ -36,10 +36,12 @@ db_connection_settings = {
 
 
 def get_connection() -> MySQLConnectionAbstract:
+    """Opens and returns a connection to the database."""
     return connect(**db_connection_settings)
 
 
 def create_tables():
+    """Ensures creation of both `books` and `members` tables."""
     conn: MySQLConnectionAbstract = get_connection()
     try:
         cur: MySQLCursorAbstract = conn.cursor()
@@ -53,9 +55,11 @@ def create_tables():
         conn.close()
 
 def _create_table_books(cur: MySQLCursorAbstract):
+    """Creates table `books` if not already created."""
     cur.execute(STMT_CREATE_TABLE_BOOKS)
 
 def _create_table_members(cur: MySQLCursorAbstract):
+    """Creates table `members` if not already created."""
     cur.execute(STMT_CREATE_TABLE_MEMBERS)
 
 
