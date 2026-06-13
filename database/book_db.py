@@ -20,21 +20,23 @@ LIMIT 1;"""
 class BookDB:
     def create_book(self, new_book: BookCreate):
         conn = get_connection()
-        cur = conn.cursor()
-        stmt_parameters = (
-            new_book.book_title,
-            new_book.book_author,
-            new_book.book_genere,
-            new_book.book_is_avilable,
-            new_book.book_borrowed_by_member_id,
-        )
-        cur.execute(STMT_INSERT, stmt_parameters)
-        new_book_id = cur.lastrowid
+        try:
+            cur = conn.cursor()
+            stmt_parameters = (
+                new_book.book_title,
+                new_book.book_author,
+                new_book.book_genere,
+                new_book.book_is_avilable,
+                new_book.book_borrowed_by_member_id,
+            )
+            cur.execute(STMT_INSERT, stmt_parameters)
+            new_book_id = cur.lastrowid
 
-        cur.close()
-        conn.commit()
-        conn.close()
-        return new_book_id
+            cur.close()
+            conn.commit()
+            return new_book_id
+        finally:
+            conn.close()
 
     def get_book_by_id(self, book_id: int):
         conn = get_connection()
