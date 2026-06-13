@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field, model_validator
 from typing import Literal
 
 
-class BookCreate(BaseModel):
+class BookView(BaseModel):
     book_id: int = Field(gt=0, alias="id")
     book_title: str = Field(max_length=50, alias="title")
     book_author: str = Field(max_length=50, alias="author")
