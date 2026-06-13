@@ -6,25 +6,22 @@ from mysql.connector.abstracts import MySQLCursorAbstract, MySQLConnectionAbstra
 
 load_dotenv()
 
-STMT_CREATE_TABLE_BOOKS = (
-    "CREATE TABLE IF NOT EXISTS books ("
-    "`id` INT PRIMARY KEY AUTO_IMCREMENT NOT NULL,"
-    "`title` VARCHAR(50) NOT NULL,"
-    "`author` VARCHAR(50) NOT NULL,"
-    "`genere` ENUM('Fiction', 'Non-Fiction', 'Science', 'History', 'Other'),"
-    "`is_avilable` BOOLEAN DEFAULT TRUE NOT NULL,"
-    "`borrowed_by_member_id` INT DEFAULT NULL,"
-    ");"
-)
-STMT_CREATE_TABLE_MEMBERS = (
-    "CREATE TABLE IF NOT EXISTS members ("
-    "`id` INT PRIMARY KEY AUTO_IMCREMENT NOT NULL,"
-    "`name` VARCHAR(50) NOT NULL,"
-    "`email` VARCHAR(50) UNIQUE NOT NULL,"
-    "`is_active` BOOLEAN DEFAULT TRUE NOT NULL,"
-    "`total_borrows` INT DEFAULT 0 CHECK(total_borrows >= 0),"
-    ");"
-)
+STMT_CREATE_TABLE_BOOKS = """CREATE TABLE IF NOT EXISTS books (
+`id` INT PRIMARY KEY AUTO_INCREMENT,
+`title` VARCHAR(50) NOT NULL,
+`author` VARCHAR(50) NOT NULL,
+`genere` ENUM('Fiction', 'Non-Fiction', 'Science', 'History', 'Other'),
+`is_avilable` BOOLEAN DEFAULT TRUE NOT NULL,
+`borrowed_by_member_id` INT DEFAULT NULL
+);"""
+
+STMT_CREATE_TABLE_MEMBERS ="""CREATE TABLE IF NOT EXISTS members (
+`id` INT PRIMARY KEY AUTO_INCREMENT,
+`is_active` BOOLEAN DEFAULT TRUE NOT NULL,
+`total_borrows` INT DEFAULT 0 CHECK(total_borrows >= 0),
+`name` VARCHAR(50) NOT NULL,
+`email` VARCHAR(50) NOT NULL
+);"""
 
 db_connection_settings = {
     'host': os.environ.get("DB_HOST", "localhost"),
@@ -35,6 +32,7 @@ db_connection_settings = {
 }
 
 
+
 def get_connection() -> MySQLConnectionAbstract:
     """Opens and returns a connection to the database."""
     return connect(**db_connection_settings)
@@ -42,25 +40,31 @@ def get_connection() -> MySQLConnectionAbstract:
 
 def create_tables():
     """Ensures creation of both `books` and `members` tables."""
+    _create_table_books()
+    _create_table_members()
+
+def _create_table_books():
+    """Creates table `books` if not already created."""
     conn: MySQLConnectionAbstract = get_connection()
     try:
         cur: MySQLCursorAbstract = conn.cursor()
-
-        _create_table_books(cur=cur)
-        _create_table_members(cur=cur)
+        cur.execute(STMT_CREATE_TABLE_BOOKS)
 
         cur.close()
-        conn.commit()
     finally:
         conn.close()
 
-def _create_table_books(cur: MySQLCursorAbstract):
-    """Creates table `books` if not already created."""
-    cur.execute(STMT_CREATE_TABLE_BOOKS)
-
-def _create_table_members(cur: MySQLCursorAbstract):
+def _create_table_members():
     """Creates table `members` if not already created."""
-    cur.execute(STMT_CREATE_TABLE_MEMBERS)
+    conn: MySQLConnectionAbstract = get_connection()
+    try:
+        cur: MySQLCursorAbstract = conn.cursor()
+        cur.execute(STMT_CREATE_TABLE_MEMBERS)
+
+        cur.close()
+    finally:
+        conn.close()
+
 
 
 
