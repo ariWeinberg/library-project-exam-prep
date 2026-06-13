@@ -1,6 +1,7 @@
 import os
 from fastapi import FastAPI
 import uvicorn
+from database.db_connection import create_tables
 from routes.book_routes import router as book_router
 from routes.member_routes import router as member_router
 from routes.report_routes import router as report_router
@@ -8,6 +9,7 @@ from routes.report_routes import router as report_router
 
 host = os.environ.get("LIBRARY_APP_HOST", "0.0.0.0")
 port = os.environ.get("LIBRARY_APP_PORT", 80)
+reload = os.environ.get("LIBRARY_APP_RELOAD", False)
 
 app = FastAPI()
 
@@ -18,4 +20,5 @@ app.include_router(report_router, prefix="/reports")
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host=host, port=port)
+    create_tables()
+    uvicorn.run("main:app", host=host, port=port, reload=reload)
