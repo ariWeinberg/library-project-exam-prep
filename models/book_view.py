@@ -5,6 +5,7 @@ from typing import Literal
 
 
 class BookView(BaseModel):
+    """BookView model."""
     book_id: int = Field(gt=0, alias="id")
     book_title: str = Field(max_length=50, alias="title")
     book_author: str = Field(max_length=50, alias="author")
