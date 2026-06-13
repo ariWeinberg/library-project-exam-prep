@@ -5,6 +5,7 @@ from typing import Literal
 
 
 class BookCreate(BaseModel):
+    """BookCreate model."""
     book_title: str = Field(max_length=50, alias="title")
     book_author: str = Field(max_length=50, alias="author")
     book_genere: Literal['Fiction', 'Non-Fiction', 'Science', 'History', 'Other'] = Field(alias="genere")
