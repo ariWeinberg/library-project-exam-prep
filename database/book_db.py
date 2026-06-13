@@ -1,11 +1,19 @@
+from email import message
+
 from models import book_create
 from models.book_create import BookCreate
 from database.db_connection import get_connection
+from models.book_view import BookView
 
 STMT_INSERT = """INSERT INTO books 
 (`title`, `author`, `genere`, `is_avilable`, `borrowed_by_member_id`)
 VALUES
 (%s, %s, %s, %s,%s);"""
+
+STMT_SELECT_A_BOOK = """SELECT *
+FROM books 
+WHERE id = %s
+LIMIT 1;"""
 
 
 
@@ -27,3 +35,23 @@ class BookDB:
         conn.commit()
         conn.close()
         return new_book_id
+
+    def get_book_by_id(self, book_id: int):
+        conn = get_connection()
+        try:
+            cur = conn.cursor(dictionary=True)
+            stmt_parameters = (book_id,)
+            cur.execute(STMT_SELECT_A_BOOK, stmt_parameters)
+
+            if not cur.with_rows:
+                message = f"no book was found with id: {book_id}."
+                raise ValueError(message)
+
+            result = cur.fetchone()
+            book: BookView = BookView(**result)
+
+            cur.close()
+            conn.commit()
+            return book
+        finally:
+            conn.close()
