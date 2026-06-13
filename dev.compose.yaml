@@ -1,0 +1,33 @@
+name: library managemnt system
+version: 0.0.1
+
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: library_db
+    ports:  
+      - "3999:3306"
+      
+  server:
+    build:
+      context: .
+      dockerfile: ./dev.dockerfile
+
+    environment:
+      DB_HOST: localhost
+      DB_PORT: 3999
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: library_db
+
+    volumes:
+      - ./:/app
+
+    ports:
+      - "4000:80"
+
+    depends_on:
+      - db
+      
