@@ -16,11 +16,12 @@ services:
       dockerfile: ./dev.dockerfile
 
     environment:
-      DB_HOST: localhost
-      DB_PORT: 3999
+      DB_HOST: db
+      DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: root
       DB_NAME: library_db
+      LIBRARY_APP_RELOAD: True
 
     volumes:
       - ./:/app
