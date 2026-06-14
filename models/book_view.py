@@ -21,4 +21,5 @@ class BookView(BaseModel):
         if (self.book_is_avilable == False) and (self.book_borrowed_by_member_id is None):
             message = f"borrowed_by_member_id must be set when is_avilable is not."
             raise ValueError (message)
-
+        
+        return self
