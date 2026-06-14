@@ -45,11 +45,11 @@ class BookDB:
             stmt_parameters = (book_id,)
             cur.execute(STMT_SELECT_A_BOOK, stmt_parameters)
 
-            if not cur.with_rows:
-                message = f"no book was found with id: {book_id}."
-                raise ValueError(message)
-
             result = cur.fetchone()
+
+            if result is None:
+                return None
+            
             book: BookView = BookView(**result)
 
             cur.close()
